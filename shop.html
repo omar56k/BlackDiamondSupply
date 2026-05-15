@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="color-scheme" content="light only">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop | Black Diamond Auto Supply</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&family=Special+Elite&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --offwhite:#f4f2ee;
+      --offwhite2:#eae7e0;
+      --stone:#ccc8c0;
+      --slate:#8a8e96;
+      --charcoal:#1a1917;
+      --accent:#6b7fa3;
+      --accent2:#a8b4c8;
+      --white:#ffffff;
+    }
+    html{scroll-behavior:smooth;}
+    body{background:var(--offwhite);color:var(--charcoal);font-family:'Special Elite',cursive;overflow-x:hidden;}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:68px;background:var(--offwhite);border-bottom:1.5px solid var(--stone);}
+    .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+    .nav-logo-text{font-family:'Permanent Marker',cursive;font-size:1rem;color:var(--charcoal);letter-spacing:0.04em;}
+    .nav-links{display:flex;gap:28px;list-style:none;align-items:center;}
+    .nav-links a{font-family:'Cabin Sketch',cursive;font-weight:700;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate);text-decoration:none;transition:color 0.2s;}
+    .nav-links a:hover, .nav-links a.active{color:var(--charcoal);}
+    .cart-btn{position:relative;background:var(--charcoal);color:var(--offwhite);border:none;font-family:'Cabin Sketch',cursive;font-weight:700;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;padding:8px 20px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s;}
+    .cart-btn:hover{background:var(--accent);}
+    .cart-count{background:var(--accent);color:var(--white);font-size:0.65rem;font-family:'Special Elite',cursive;padding:2px 6px;border-radius:99px;min-width:18px;text-align:center;}
+
+    /* SHOP HEADER */
+    .shop-header{padding:100px 72px 48px;background:var(--charcoal);position:relative;overflow:hidden;}
+    .shop-header::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,0.015) 40px,rgba(255,255,255,0.015) 41px);pointer-events:none;}
+    .shop-header-label{font-family:'Special Elite',cursive;font-size:0.66rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+    .shop-header-title{font-family:'Permanent Marker',cursive;font-size:clamp(2.5rem,5vw,4rem);color:var(--offwhite);line-height:1;}
+    .shop-header-sub{font-family:'Special Elite',cursive;font-size:0.9rem;color:var(--slate);margin-top:12px;max-width:500px;line-height:1.7;}
+    .coming-soon-banner{display:inline-flex;align-items:center;gap:10px;margin-top:20px;background:rgba(107,127,163,0.15);border:1px solid var(--accent2);padding:10px 20px;font-family:'Special Elite',cursive;font-size:0.8rem;color:var(--accent2);letter-spacing:0.08em;}
+
+    /* FILTERS */
+    .filter-bar{padding:24px 72px;background:var(--offwhite2);border-bottom:1.5px solid var(--stone);display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:68px;z-index:90;}
+    .filter-label{font-family:'Special Elite',cursive;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--slate);margin-right:4px;}
+    .filter-btn{font-family:'Cabin Sketch',cursive;font-weight:700;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 16px;border:1.5px solid var(--stone);background:transparent;color:var(--slate);cursor:pointer;transition:all 0.2s;}
+    .filter-btn:hover{border-color:var(--charcoal);color:var(--charcoal);}
+    .filter-btn.active{background:var(--charcoal);color:var(--offwhite);border-color:var(--charcoal);}
+    .filter-sep{width:1px;height:24px;background:var(--stone);margin:0 6px;}
+    .sort-select{font-family:'Special Elite',cursive;font-size:0.78rem;color:var(--slate);background:transparent;border:none;border-bottom:1px solid var(--stone);outline:none;cursor:pointer;padding:4px 0;margin-left:auto;}
+
+    /* PRODUCT GRID */
+    .shop-main{padding:48px 72px 88px;}
+    .results-count{font-family:'Special Elite',cursive;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--slate);margin-bottom:28px;}
+    .product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+
+    /* PRODUCT CARD */
+    .product-card{background:var(--offwhite2);border:1.5px solid var(--stone);position:relative;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;}
+    .product-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(26,25,23,0.1);}
+    .product-img{width:100%;aspect-ratio:1;overflow:hidden;background:var(--offwhite);display:flex;align-items:center;justify-content:center;position:relative;}
+    .product-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.3s;}
+    .product-card:hover .product-img img{transform:scale(1.04);}
+    /* placeholder when no image */
+    .product-img .img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--offwhite2);}
+    .product-img .img-placeholder svg{opacity:0.15;}
+    .product-img .img-placeholder span{font-family:'Special Elite',cursive;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--stone);}
+    .product-badge{position:absolute;top:10px;left:10px;font-family:'Cabin Sketch',cursive;font-weight:700;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;padding:3px 8px;background:var(--charcoal);color:var(--offwhite);}
+    .product-badge.sale{background:var(--accent);}
+    .product-info{padding:16px;}
+    .product-brand{font-family:'Special Elite',cursive;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+    .product-name{font-family:'Cabin Sketch',cursive;font-weight:700;font-size:0.95rem;color:var(--charcoal);line-height:1.2;margin-bottom:6px;}
+    .product-desc{font-family:'Special Elite',cursive;font-size:0.72rem;color:var(--slate);line-height:1.55;margin-bottom:14px;}
+    .product-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    .product-price{font-family:'Permanent Marker',cursive;font-size:1.1rem;color:var(--charcoal);}
+    .product-price .old-price{font-size:0.75rem;color:var(--stone);text-decoration:line-through;font-family:'Special Elite',cursive;display:block;margin-bottom:0;}
+    .add-btn{font-family:'Cabin Sketch',cursive;font-weight:700;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:8px 14px;background:var(--charcoal);color:var(--offwhite);border:none;cursor:pointer;transition:background 0.2s;white-space:nowrap;}
+    .add-btn:hover{background:var(--accent);}
+    .product-sizes{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap;}
+    .size-tag{font-family:'Special Elite',cursive;font-size:0.6rem;letter-spacing:0.1em;padding:2px 7px;border:1px solid var(--stone);color:var(--slate);cursor:pointer;transition:all 0.15s;}
+    .size-tag:hover,.size-tag.active{border-color:var(--charcoal);color:var(--charcoal);}
+
+    /* CART SIDEBAR */
+    .cart-overlay{position:fixed;inset:0;background:rgba(26,25,23,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+    .cart-overlay.open{opacity:1;pointer-events:all;}
+    .cart-sidebar{position:fixed;top:0;right:0;bottom:0;width:360px;background:var(--offwhite);z-index:201;transform:translateX(100%);transition:transform 0.35s ease;display:flex;flex-direction:column;}
+    .cart-sidebar.open{transform:translateX(0);}
+    .cart-top{padding:24px 24px 16px;border-bottom:1.5px solid var(--stone);display:flex;align-items:center;justify-content:space-between;}
+    .cart-top h2{font-family:'Permanent Marker',cursive;font-size:1.4rem;color:var(--charcoal);}
+    .cart-close{background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--slate);line-height:1;}
+    .cart-body{flex:1;overflow-y:auto;padding:20px 24px;}
+    .cart-empty{text-align:center;padding:60px 0;font-family:'Special Elite',cursive;font-size:0.88rem;color:var(--stone);line-height:1.8;}
+    .cart-item{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:start;padding:16px 0;border-bottom:1px solid var(--stone);}
+    .cart-item-img{width:56px;height:56px;background:var(--offwhite2);border:1px solid var(--stone);overflow:hidden;}
+    .cart-item-img img{width:100%;height:100%;object-fit:cover;}
+    .cart-item-name{font-family:'Cabin Sketch',cursive;font-weight:700;font-size:0.85rem;color:var(--charcoal);margin-bottom:3px;}
+    .cart-item-brand{font-family:'Special Elite',cursive;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+    .cart-item-price{font-family:'Permanent Marker',cursive;font-size:0.95rem;color:var(--charcoal);}
+    .cart-remove{font-size:1rem;background:none;border:none;cursor:pointer;color:var(--stone);transition:color 0.2s;padding:0;}
+    .cart-remove:hover{color:var(--charcoal);}
+    .cart-footer{padding:20px 24px;border-top:1.5px solid var(--stone);}
+    .cart-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;}
+    .cart-total-label{font-family:'Special Elite',cursive;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--slate);}
+    .cart-total-price{font-family:'Permanent Marker',cursive;font-size:1.5rem;color:var(--charcoal);}
+    .checkout-btn{width:100%;padding:16px;background:var(--charcoal);color:var(--offwhite);font-family:'Cabin Sketch',cursive;font-weight:700;font-size:0.95rem;letter-spacing:0.1em;text-transform:uppercase;border:none;cursor:pointer;transition:background 0.2s;margin-bottom:10px;}
+    .checkout-btn:hover{background:var(--accent);}
+    .checkout-note{font-family:'Special Elite',cursive;font-size:0.7rem;color:var(--slate);text-align:center;line-height:1.6;}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--charcoal);color:var(--offwhite);font-family:'Cabin Sketch',cursive;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;padding:14px 28px;z-index:300;opacity:0;transition:all 0.3s;white-space:nowrap;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    /* NO RESULTS */
+    .no-results{grid-column:1/-1;text-align:center;padding:80px 0;font-family:'Special Elite',cursive;color:var(--stone);font-size:0.95rem;line-height:1.8;}
+
+    /* RESPONSIVE */
+    @media(max-width:960px){
+      nav{padding:0 20px;}.nav-links{display:none;}
+      .shop-header{padding:90px 24px 36px;}
+      .filter-bar{padding:16px 24px;}
+      .shop-main{padding:32px 24px 60px;}
+      .product-grid{grid-template-columns:repeat(2,1fr);gap:14px;}
+      .cart-sidebar{width:100%;}
+    }
+    @media(max-width:480px){
+      .product-grid{grid-template-columns:1fr 1fr;gap:10px;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="black-diamond.html">
+      <span class="nav-logo-text">&#x25C6; Black Diamond</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="black-diamond.html">Home</a></li>
+      <li><a href="black-diamond.html#brands">Brands</a></li>
+      <li><a href="black-diamond.html#contact">Contact</a></li>
+      <li><a href="shop.html" class="active">Shop</a></li>
+    </ul>
+    <button class="cart-btn" onclick="toggleCart()">
+      &#x1F6D2; Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </nav>
+
+  <!-- SHOP HEADER -->
+  <div class="shop-header">
+    <div class="shop-header-label">— Black Diamond Auto Supply</div>
+    <h1 class="shop-header-title">The Shop</h1>
+    <p class="shop-header-sub">Professional-grade detailing supplies. The same products we stock on our shelves, available to order direct.</p>
+    <div class="coming-soon-banner">
+      &#x1F6A7; &nbsp; This page is currently under construction &mdash; check back soon!
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+    <div class="filter-bar">
+    <span class="filter-label">Brand:</span>
+    <button class="filter-btn active" data-brand="all">All</button>
+    <button class="filter-btn" data-brand="Koch Chemie">Koch Chemie</button>
+    <button class="filter-btn" data-brand="Meguiars">Meguiar&#39;s</button>
+    <button class="filter-btn" data-brand="PS">P&amp;S</button>
+    <button class="filter-btn" data-brand="Ultra Clean">Ultra Clean</button>
+    <button class="filter-btn" data-brand="Rupes">Rupes</button>
+    <button class="filter-btn" data-brand="Gyeon">Gyeon</button>
+    <button class="filter-btn" data-brand="Mothers">Mothers</button>
+    <button class="filter-btn" data-brand="Stoner">Stoner</button>
+    <div class="filter-sep"></div>
+    <span class="filter-label">Category:</span>
+    <button class="filter-btn active" data-cat="all">All</button>
+    <button class="filter-btn" data-cat="chemicals">Chemicals</button>
+    <button class="filter-btn" data-cat="compounds">Compounds</button>
+    <button class="filter-btn" data-cat="coatings">Coatings</button>
+    <button class="filter-btn" data-cat="pads">Pads &amp; Tools</button>
+    <button class="filter-btn" data-cat="interior">Interior</button>
+    <button class="filter-btn" data-cat="fresheners">Air Fresheners</button>
+    <select class="sort-select" id="sortSelect">
+      <option value="default">Sort: Featured</option>
+      <option value="price-asc">Price: Low to High</option>
+      <option value="price-desc">Price: High to Low</option>
+      <option value="name">Name A&#8211;Z</option>
+    </select>
+  </div>
+
+  <!-- SHOP MAIN -->
+  <div class="shop-main">
+    <div class="results-count" id="resultsCount">Showing 20 products</div>
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+
+  <!-- CART OVERLAY + SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-top">
+      <h2>Your Cart</h2>
+      <button class="cart-close" onclick="toggleCart()">&times;</button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <div class="cart-empty">Your cart is empty.<br>Add some products to get started.</div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span class="cart-total-label">Total</span>
+        <span class="cart-total-price" id="cartTotal">$0.00</span>
+      </div>
+      <button class="checkout-btn" onclick="showComingSoon()">Proceed to Checkout</button>
+      <p class="checkout-note">&#x26A0;&#xFE0F; Online checkout coming soon!<br>Call us at <a href="tel:+18188243332" style="color:var(--accent);">(818) 824-3332</a> or visit us in store.</p>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const products = [
+      {id:1,  brand:'Koch Chemie', cat:'chemicals',  name:'Green Star APC',             desc:'All-purpose alkaline cleaner. Highly concentrated, phosphate-free. Safe on paint, interior, and engine bay.',  price:18.99, sizes:['1L','5L'], badge:'', img:''},
+      {id:2,  brand:'Koch Chemie', cat:'chemicals',  name:'Gentle Snow Foam',           desc:'pH-neutral pre-wash snow foam. Safe for all coatings and PPF. Fresh scent, outstanding lubrication.',           price:21.99, sizes:['1L','5L'], badge:'', img:''},
+      {id:3,  brand:'Koch Chemie', cat:'compounds',  name:'H9.02 Heavy Cut',            desc:'Professional heavy cutting compound for deep scratches, heavy oxidation, and aggressive paint correction.',       price:34.99, sizes:['1L'], badge:'Pro Pick', img:''},
+      {id:4,  brand:'Koch Chemie', cat:'compounds',  name:'F6.01 Fine Cut',             desc:'Fine cut polish that removes light swirls and haze. Excellent finishing ability with minimal dusting.',           price:29.99, sizes:['1L'], badge:'', img:''},
+      {id:5,  brand:'Koch Chemie', cat:'chemicals',  name:'Magic Wheel Cleaner',        desc:'Acid-based reactive wheel cleaner. Thick cling formula removes brake dust and iron deposits on contact.',        price:22.99, sizes:['1L','5L'], badge:'', img:''},
+      {id:6,  brand:'Koch Chemie', cat:'coatings',   name:'Spray Sealant S0.02',        desc:'Quick spray-on paint sealant. Up to 6 months of protection. Hydrophobic and high-gloss finish.',               price:26.99, sizes:['1L'], badge:'', img:''},
+      {id:7,  brand:'Meguiars',   cat:'compounds',  name:'Ultimate Compound',           desc:'Removes heavy swirls, scratches, and oxidation. Safe for all paints. Works by hand or machine.',               price:19.99, sizes:['16oz','32oz'], badge:'', img:''},
+      {id:8,  brand:'Meguiars',   cat:'compounds',  name:'Mirror Glaze M205',           desc:'Ultra fine finishing polish. Removes light swirls and produces mirror-like clarity.',                           price:24.99, sizes:['8oz','32oz'], badge:'', img:''},
+      {id:9,  brand:'Meguiars',   cat:'pads',       name:'DA Microfiber Cutting Disc',  desc:'Professional microfiber cutting pad. Works with DA or rotary. Machine washable and reusable.',                  price:14.99, sizes:['3in','5in','6in'], badge:'', img:''},
+      {id:10, brand:'PS',         cat:'chemicals',  name:'Bead Maker',                  desc:'Paint protectant and quick detailer in one. Spray on, wipe off. Safe for all coated and uncoated surfaces.',    price:22.99, sizes:['16oz','1gal'], badge:'Best Seller', img:''},
+      {id:11, brand:'PS',         cat:'chemicals',  name:'Brake Buster Wheel Cleaner',  desc:'Non-acid wheel cleaner that dissolves brake dust, grime, and road film. Safe on all wheel types.',               price:16.99, sizes:['18oz','1gal'], badge:'', img:''},
+      {id:12, brand:'PS',         cat:'chemicals',  name:'Pearl Auto Shampoo',          desc:'pH-balanced car wash soap. 100% biodegradable. Safe for wax, sealant, and ceramic coated vehicles.',           price:18.99, sizes:['1gal','5gal'], badge:'', img:''},
+      {id:13, brand:'PS',         cat:'interior',   name:'Xpress Interior Cleaner',     desc:'No-dilution interior cleaner for leather, vinyl, plastic, and fabric. No residue. Fresh scent.',                price:14.99, sizes:['16oz','1gal'], badge:'', img:''},
+      {id:14, brand:'Ultra Clean',cat:'chemicals',  name:'High Gloss Tire Dressing',    desc:'Concentrated water-based tire and trim dressing. Deep wet-look shine that lasts.',                               price:12.99, sizes:['1gal','5gal'], badge:'', img:''},
+      {id:15, brand:'Ultra Clean',cat:'chemicals',  name:'Viper Dressing',              desc:'Premium interior and exterior dressing concentrate. Protects surfaces from UV and cracking.',                    price:14.99, sizes:['1gal'], badge:'', img:''},
+      {id:16, brand:'Ultra Clean',cat:'chemicals',  name:'Purple Wash and Wax',         desc:'Combined wash and wax shampoo. Cleans and leaves a protective gloss layer in one step.',                         price:11.99, sizes:['1gal','5gal'], badge:'', img:''},
+      {id:17, brand:'Rupes',      cat:'pads',       name:'Yellow DA Polishing Pad',     desc:'The most popular Rupes pad. Medium foam for one-step polishing and light correction.',                           price:19.99, sizes:['5in','6in'], badge:'', img:''},
+      {id:18, brand:'Rupes',      cat:'pads',       name:'Blue DA Cutting Pad',         desc:'Coarse foam for aggressive correction and heavy defect removal. Pairs with Rupes compounds.',                    price:19.99, sizes:['5in','6in'], badge:'', img:''},
+      {id:19, brand:'Rupes',      cat:'compounds',  name:'UNO Pure Fine Polish',        desc:'Universally compatible fine polish. Removes light defects and leaves a high-gloss swirl-free finish.',           price:27.99, sizes:['250ml','750ml'], badge:'', img:''},
+      {id:20, brand:'Gyeon',      cat:'coatings',   name:'Q2M WetCoat',                desc:'Spray-on SiO2 ceramic protection. Apply to wet car, rinse off. Effortless protection every wash.',              price:29.99, sizes:['500ml','1L'], badge:'New', img:''},
+      {id:21, brand:'Gyeon',      cat:'chemicals',  name:'Q2M Iron Remover',            desc:'pH-triggered iron and fallout remover. Color-changes on contact with iron particles.',                           price:24.99, sizes:['500ml','4L'], badge:'', img:''},
+      {id:22, brand:'Gyeon',      cat:'chemicals',  name:'Q2M Bathe Shampoo',           desc:'Coating-safe car shampoo with high lubrication. Maintains hydrophobics on protected surfaces.',                 price:19.99, sizes:['400ml','4L'], badge:'', img:''},
+      {id:23, brand:'Mothers',    cat:'chemicals',  name:'Mag and Aluminum Polish',     desc:'The legendary metal polish. Brilliant shine on aluminum wheels, stainless steel, chrome, and brass.',           price:11.99, sizes:['5oz','10oz'], badge:'Classic', img:''},
+      {id:24, brand:'Mothers',    cat:'coatings',   name:'CMX Ceramic Spray Coating',   desc:'Hybrid ceramic spray that bonds to paint. Extreme water beading and UV protection.',                            price:19.99, sizes:['16oz'], badge:'', img:''},
+      {id:25, brand:'Stoner',     cat:'interior',   name:'Invisible Glass Cleaner',     desc:'Professional streak-free glass cleaner. No soaps, scents, or dyes. Crystal clear results every time.',         price:8.99,  sizes:['19oz','22oz'], badge:'#1 Glass', img:''},
+      {id:26, brand:'Stoner',     cat:'chemicals',  name:'Tarminator Tar Remover',      desc:'Breaks down tar, sap, grease, and road film. Safe on clear coat, chrome, and wheels.',                          price:10.99, sizes:['10oz'], badge:'', img:''},
+    ];
+
+    let cart = [];
+    let activeBrand = 'all';
+    let activeCat = 'all';
+    let activeSort = 'default';
+
+    function render() {
+      let filtered = products.filter(function(p) {
+        var brandOk = activeBrand === 'all' || p.brand === activeBrand;
+        var catOk   = activeCat === 'all'   || p.cat === activeCat;
+        return brandOk && catOk;
+      });
+      if (activeSort === 'price-asc')  filtered.sort(function(a,b){ return a.price - b.price; });
+      if (activeSort === 'price-desc') filtered.sort(function(a,b){ return b.price - a.price; });
+      if (activeSort === 'name')       filtered.sort(function(a,b){ return a.name.localeCompare(b.name); });
+
+      var grid = document.getElementById('productGrid');
+      var count = document.getElementById('resultsCount');
+      if (count) count.textContent = 'Showing ' + filtered.length + ' product' + (filtered.length !== 1 ? 's' : '');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="no-results">No products found.<br>Try a different filter.</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(function(p) {
+        var sizesHtml = p.sizes.length ? '<div class="product-sizes">' + p.sizes.map(function(s,i){ return '<span class="size-tag' + (i===0?' active':'') + '" data-size="'+s+'">' + s + '</span>'; }).join('') + '</div>' : '';
+        var imgHtml = p.img
+          ? '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy">'
+          : '<div class="img-placeholder"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#1a1917" stroke-width="1.5"><rect x="4" y="10" width="32" height="24" rx="2"/><circle cx="14" cy="18" r="3"/><path d="M4 28l8-8 6 6 5-5 9 9"/></svg><span>Photo coming soon</span></div>';
+        var badgeHtml = p.badge ? '<div class="product-badge">' + p.badge + '</div>' : '';
+        var displayBrand = p.brand === 'PS' ? 'P&S' : p.brand === 'Meguiars' ? "Meguiar's" : p.brand;
+        return '<div class="product-card" data-id="' + p.id + '">'
+          + '<div class="product-img">' + imgHtml + badgeHtml + '</div>'
+          + '<div class="product-info">'
+          + '<div class="product-brand">' + displayBrand + '</div>'
+          + '<div class="product-name">' + p.name + '</div>'
+          + '<div class="product-desc">' + p.desc + '</div>'
+          + sizesHtml
+          + '<div class="product-footer">'
+          + '<div class="product-price">$' + p.price.toFixed(2) + '</div>'
+          + '<button class="add-btn" data-product-id="' + p.id + '">+ Add</button>'
+          + '</div></div></div>';
+      }).join('');
+
+      // Size tag clicks
+      grid.querySelectorAll('.size-tag').forEach(function(tag) {
+        tag.addEventListener('click', function() {
+          this.closest('.product-sizes').querySelectorAll('.size-tag').forEach(function(t){ t.classList.remove('active'); });
+          this.classList.add('active');
+        });
+      });
+
+      // Add to cart clicks
+      grid.querySelectorAll('.add-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          addToCart(parseInt(this.dataset.productId));
+        });
+      });
+    }
+
+    // Filter buttons via event delegation
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('[data-brand]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          activeBrand = this.dataset.brand;
+          document.querySelectorAll('[data-brand]').forEach(function(b){ b.classList.remove('active'); });
+          this.classList.add('active');
+          render();
+        });
+      });
+
+      document.querySelectorAll('[data-cat]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          activeCat = this.dataset.cat;
+          document.querySelectorAll('[data-cat]').forEach(function(b){ b.classList.remove('active'); });
+          this.classList.add('active');
+          render();
+        });
+      });
+
+      var sortEl = document.getElementById('sortSelect');
+      if (sortEl) {
+        sortEl.addEventListener('change', function() {
+          activeSort = this.value;
+          render();
+        });
+      }
+
+      render();
+    });
+
+    function addToCart(id) {
+      var product = null;
+      for (var i = 0; i < products.length; i++) { if (products[i].id === id) { product = products[i]; break; } }
+      if (!product) return;
+      var card = document.querySelector('[data-id="' + id + '"]');
+      var sizeEl = card ? card.querySelector('.size-tag.active') : null;
+      var selectedSize = sizeEl ? sizeEl.dataset.size : (product.sizes[0] || '');
+      var key = id + '-' + selectedSize;
+      var existing = null;
+      for (var j = 0; j < cart.length; j++) { if (cart[j].key === key) { existing = cart[j]; break; } }
+      if (existing) { existing.qty++; } 
+      else { cart.push({key:key, id:id, name:product.name, brand:product.brand, price:product.price, size:selectedSize, qty:1, img:product.img}); }
+      updateCartUI();
+      showToast('Added: ' + product.name + (selectedSize ? ' (' + selectedSize + ')' : ''));
+    }
+
+    function removeFromCart(key) {
+      cart = cart.filter(function(i){ return i.key !== key; });
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      var total = 0; var count = 0;
+      for (var i = 0; i < cart.length; i++) { total += cart[i].price * cart[i].qty; count += cart[i].qty; }
+      var countEl = document.getElementById('cartCount');
+      var totalEl = document.getElementById('cartTotal');
+      if (countEl) countEl.textContent = count;
+      if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
+      var body = document.getElementById('cartBody');
+      if (!body) return;
+      if (cart.length === 0) {
+        body.innerHTML = '<div class="cart-empty">Your cart is empty.<br>Add some products to get started.</div>';
+        return;
+      }
+      body.innerHTML = cart.map(function(item) {
+        var displayBrand = item.brand === 'PS' ? 'P&S' : item.brand === 'Meguiars' ? "Meguiar's" : item.brand;
+        return '<div class="cart-item">'
+          + '<div class="cart-item-img">' + (item.img ? '<img src="'+item.img+'" alt="'+item.name+'">' : '<div style="width:100%;height:100%;background:var(--offwhite2);"></div>') + '</div>'
+          + '<div><div class="cart-item-brand">' + displayBrand + '</div>'
+          + '<div class="cart-item-name">' + item.name + (item.size ? ' <span style="font-size:0.7rem;color:var(--slate);">('+item.size+')</span>' : '') + '</div>'
+          + '<div class="cart-item-price">$' + item.price.toFixed(2) + ' x ' + item.qty + '</div></div>'
+          + '<button class="cart-remove" data-key="' + item.key + '">&times;</button>'
+          + '</div>';
+      }).join('');
+      body.querySelectorAll('.cart-remove').forEach(function(btn) {
+        btn.addEventListener('click', function(){ removeFromCart(this.dataset.key); });
+      });
+    }
+
+    function toggleCart() {
+      document.getElementById('cartSidebar').classList.toggle('open');
+      document.getElementById('cartOverlay').classList.toggle('open');
+    }
+
+    function showComingSoon() {
+      showToast('Checkout coming soon! Call (818) 824-3332 to order.');
+    }
+
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(function(){ t.classList.remove('show'); }, 3000);
+    }
+  </script>
+</body>
+</html>
